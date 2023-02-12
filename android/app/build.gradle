@@ -69,3 +69,5 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
+
+//TODO: add random question of the day from internet, find API

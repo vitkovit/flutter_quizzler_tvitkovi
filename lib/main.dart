@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+//import 'package:quizzler/question.dart'; can be deleted if not used
+import 'quiz_brain.dart';
 
-void main() => runApp(Quizzler());
+//create new quizBrain object and it should be equal to QuizBrain();
+QuizBrain quizBrain = QuizBrain(); //that construct new object which we can refer to
+//import 'question.dart';
+void main() => runApp(const Quizzler());
 
 class Quizzler extends StatelessWidget {
+  // you can save type to project dictionary
   const Quizzler({super.key});
 
   @override
@@ -11,7 +17,7 @@ class Quizzler extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.grey.shade900,
-        body: SafeArea(
+        body: const SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: QuizPage(),
@@ -23,37 +29,56 @@ class Quizzler extends StatelessWidget {
 }
 
 class QuizPage extends StatefulWidget {
+  const QuizPage({super.key});
+
   @override
   _QuizPageState createState() => _QuizPageState();
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Icon> scoreKeeper = [
-    Icon(
-      Icons.check,
-      color: Colors.green,
-    ),
-    Icon(
-      Icons.close,
-      color: Colors.red,
-    ),
-    Icon(
-      Icons.check,
-      color: Colors.green,
-    ),
-    Icon(
-      Icons.close,
-      color: Colors.red,
-    ),
-    Icon(
-      Icons.check,
-      color: Colors.green,
-    ),
-    Icon(
-      Icons.close,
-      color: Colors.red,
-    ),
-  ];
+  // List<Icon> scoreKeeper = [
+  //   Icon(
+  //     Icons.check,
+  //     color: Colors.green,
+  //   ),
+  //   Icon(
+  //     Icons.close,
+  //     color: Colors.red,
+  //   ),
+  //   Icon(
+  //     Icons.check,
+  //     color: Colors.green,
+  //   ),
+  //   Icon(
+  //     Icons.close,
+  //     color: Colors.red,
+  //   ),
+  //   Icon(
+  //     Icons.check,
+  //     color: Colors.green,
+  //   ),
+  //   Icon(
+  //     Icons.close,
+  //     color: Colors.red,
+  //   ),
+  // ];
+  // List<String> questions = [
+  //   'You can lead a cow down stairs but not up stairs.',
+  //   'Approximately one quarter of human bones are in the feet.',
+  //   'A slug\'s blood is green.',
+  // ];
+  // List<bool> answer = [
+  //   false,
+  //   true,
+  //   true,
+  // ];
+  //
+  // Question q1 = Question(
+  //   q: 'You can lead a cow down stairs but not up stairs.',
+  //   a: false,
+  // );
+
+  int questionNumber = 0;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -63,12 +88,12 @@ class _QuizPageState extends State<QuizPage> {
         Expanded(
           flex: 5,
           child: Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                quizBrain.getQuestionText(questionNumber), //questionBank is now a property of a quizBrain object
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 25.0,
                   color: Colors.white,
                 ),
@@ -78,19 +103,36 @@ class _QuizPageState extends State<QuizPage> {
         ),
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.green,
               ),
-              child: Text(
+              child: const Text(
                 'True',
                 style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 20.0,
+                  color: Colors.white,
+                  fontSize: 30.0,
                 ),
               ),
               onPressed: () {
+    //            quizBrain.questionBank[questionNumber].questionAnswer = true; //this can mess up the code if we change it before checking
+                bool correctAnswer =
+    //                quizBrain.questionBank[questionNumber].questionAnswer; // check logic in 2 lists
+                //quizBrain.questionBank[questionNumber].questionAnswer;
+                  quizBrain.getCorrectAnswer(questionNumber);
+                if (correctAnswer == true) {
+                  print('right');
+                } else {
+                  print('wrong');
+                }
+                // print(q1.questionText);
+                // print(q1.questionAnswer);
+
+                setState(() {
+                  // set state needs to be set to iterate through list
+                  questionNumber++;
+                });
                 //The user picked true.
               },
             ),
@@ -98,27 +140,37 @@ class _QuizPageState extends State<QuizPage> {
         ),
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.red,
               ),
-              child: Text(
+              child: const Text(
                 'False',
                 style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.grey,
+                  fontSize: 30.0,
+                  color: Colors.white,
                 ),
               ),
               onPressed: () {
-                //The user picked false.
+                bool correctAnswer =
+                    quizBrain.getCorrectAnswer(questionNumber); // check logic in 2 lists
+                if (correctAnswer == false) {
+                  // logic go before next question
+                  print('right');
+                } else {
+                  print('wrong');
+                }
+                setState(() {
+                  questionNumber++;
+                });
               },
             ),
           ),
         ),
-        Row(
-          children: scoreKeeper,
-        )
+        // Row(
+        //   children: scoreKeeper,
+        // )
       ],
     );
   }
