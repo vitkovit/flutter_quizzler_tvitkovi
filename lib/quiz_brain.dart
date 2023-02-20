@@ -5,7 +5,6 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class QuizBrain {
-
   int _questionNumber = 0; //make it private
 
   final List<Question> _questionBank = [
@@ -23,129 +22,77 @@ class QuizBrain {
     Question('Google was originally called "Backrub".', true),
     Question('Chocolate affects a dog\'s heart and nervous system; a few ounces are enough to kill a small dog.', true),
     Question('In West Virginia, USA, if you accidentally hit an animal with your car, you are free to take it home to eat.', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-    Question('test True', true),
-
-    Question('test False', false),
+    Question('Is this the last question?', false),
+    Question('haha, this is the last question', false),
+    Question('xD you did it again fool, over and out', true),
   ];
 
 //solving issue with not serving error after last question
   void nextQuestion() {
-    if (_questionNumber < _questionBank.length -
-        1) { //simple -1 will not go over number of questions
-      _questionNumber++; //increase the number
-      print('nextQuestion()# = $_questionNumber');
-      // print(_questionBank.length);
+    if (_questionNumber < _questionBank.length - 1)
+    //simple -1 will not go over number of questions
+    {
+      //increase the number
+      _questionNumber++;
     }
   }
+
   String getQuestionText() {
 //    String getQuestionText(int questionText){ //no need for input
 //    return _questionBank[questionNumber].questionText; //swap for private
     return _questionBank[_questionNumber].questionText;
   }
+
   bool getCorrectAnswer() {
     return _questionBank[_questionNumber].questionAnswer;
   }
 
   bool isFinished(context) {
-    int x = _questionBank.length;
     if (_questionNumber >= _questionBank.length - 1) {
-
-      print('executing is finished $_questionNumber.');
-      print('q length, $_questionBank.length');
-      print(_questionBank.length);
-
-      //Phoenix.rebirth(context);
-      return true;}
-      else {
-        return false;
+      return true;
+    } else {
+      return false;
     }
-      alertButtons(context, x);
-    // showDialog(
-    //     context: context,
-    //     builder: (context) =>
-    //         AlertDialog(
-    //           content: Text("final score is $score out of $x "),
-    //         ));
   }
 
-  int finalScore(List<Icon> iconList, String correctCount) {
-    // print('next print is length of a list');
-    // print(list.length);
-    if (iconList.isEmpty) {
-      return 0;
-    }
-    int count = 0;
-
-    for (int i = 0; i < iconList.length; i++) {
-      if (iconList[i].semanticLabel == correctCount) {
-        count++;
-      }
-    }
-    // if (count == _questionBank.length - 1) {
-    // if (count <= _questionBank.length - 1) {
-    //   // print('count is : $count');
-    //   // print('length is');
-    //   // print(_questionBank.length);
-    // }
-    return count;
-  }
+  // // Instead of counting correct answers we can count icon list
+  // int finalScore(List<Icon> iconList, String correctCount) {
+  //   if (iconList.isEmpty) {
+  //     return 0;
+  //   }
+  //   int count = 0;
+  //
+  //   for (int i = 0; i < iconList.length; i++) {
+  //     if (iconList[i].semanticLabel == correctCount) {
+  //       count++;
+  //     }
+  //   }
+  //   return count;
+  // }
 
   // int scoreCount() {
   //   int score=0;
   //
   //   return null;
   // }
-  void alertButtons(context, int score) {
-    int x = _questionBank.length;
-    // print('alert score: $score');
-    // if (score > 3) {
-    //   showDialog(
-    //       context: context,
-    //       builder: (context) =>
-    //           AlertDialog(
-    //             content: Text("hi"),
-    //           ));
-    // } else {
+  // building popup alert buttons
+  void alertButtons(context, int correctAnswers) {
+    //define total number of questions
+    int totalQuestions = _questionBank.length;
+    //build popup alerts
     Alert(
-      //if (score <13) {};
       context: context,
       type: AlertType.none,
-
       title: "QUIZZLER",
-      desc: "Quiz finished score $score out of $x",
+      //display results
+      desc: "Quiz finished score $correctAnswers out of $totalQuestions",
       buttons: [
         DialogButton(
           onPressed: () {
-            //Navigator.pop(context);
+            // call reset of main function, it is wrapped in Phoenix
             Phoenix.rebirth(context);
+            //start from first question
             _questionNumber = 0;
-
           },
           color: Colors.green,
           child: const Text(
@@ -154,7 +101,8 @@ class QuizBrain {
           ),
         ),
         DialogButton(
-          onPressed: () => exit(0), //Navigator.pop(context),
+          //total exit of app
+          onPressed: () => exit(0),
           color: Colors.red,
           child: const Text(
             "Exit app",
@@ -164,44 +112,4 @@ class QuizBrain {
       ],
     ).show();
   }
-  // void reset() {
-  //   _questionNumber = 0;
-  // }
-
-//     int countIconOccurrencesUsingLoop(List<Icon> icon_list, String element) {
-//       print(icon_list[0].semanticLabel);
-// // [Icon(IconData(U+0E156), color: MaterialColor(primary value: Color(0xff4caf50))), Icon(IconData(U+0E16A), color: MaterialColor(primary value: Color(0xfff44336))), Icon(IconData(U+0E156), color: MaterialColor(primary value: Color(0xff4caf50))), Icon(IconData(U+0E16A), color: MaterialColor(primary value: Color(0xfff44336))), Icon(IconData(U+0E156), color: MaterialColor(primary value: Color(0xff4caf50))), Icon(IconData(U+0E16A), color: MaterialColor(primary value: Color(0xfff44336)))]
-//       if (icon_list == null || icon_list.isEmpty) {
-//         return 0;
-//       }
-//
-//       int count = 0;
-//       for (int i = 0; i < icon_list.length; i++) {
-//         if (icon_list[i].semanticLabel == element) {
-//           count++;
-//         }
-//       }
-//
-//       return count;
-//     }
-
-  // now we need to delegate task of serving the questions to quiz_brain
-
-//   void _showDialog() {
-//     Alert(
-//         context: context,
-//         title: "FilledStacks",
-//         desc: "My tutorials show real-world structures.",
-//         closeFunction: () => _dialogService.dialogComplete(),
-//         buttons: [
-//           DialogButton(
-//             child: Text('Ok'),
-//             onPressed: () {
-//               _dialogService.dialogComplete();
-//               Navigator.of(context).pop();
-//             },
-//           )
-//         ]).show();
-//   }
-// }
 }
