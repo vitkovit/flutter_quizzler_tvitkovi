@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'question.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class QuizBrain {
 
@@ -13,25 +16,42 @@ class QuizBrain {
     Question('A slug\'s blood is green.', true),
     Question('Buzz Aldrin\'s mother\'s maiden name was "Moon".', true),
     Question('It is illegal to pee in the Ocean in Portugal.', true),
-    Question(
-        'No piece of square dry paper can be folded in half more than 7 times.',
-        false),
-    Question(
-        'In London, UK, if you happen to die in the House of Parliament, you are technically entitled to a state funeral, because the building is considered too sacred a place.',
-        true),
-    Question(
-        'The loudest sound produced by any animal is 188 decibels. That animal is the African Elephant.',
-        false),
-    Question(
-        'The total surface area of two human lungs is approximately 70 square metres.',
-        true),
+    Question('No piece of square dry paper can be folded in half more than 7 times.', false),
+    Question('In London, UK, if you happen to die in the House of Parliament, you are technically entitled to a state funeral, because the building is considered too sacred a place.', true),
+    Question('The loudest sound produced by any animal is 188 decibels. That animal is the African Elephant.', false),
+    Question('The total surface area of two human lungs is approximately 70 square metres.', true),
     Question('Google was originally called "Backrub".', true),
-    Question(
-        'Chocolate affects a dog\'s heart and nervous system; a few ounces are enough to kill a small dog.',
-        true),
-    Question(
-        'In West Virginia, USA, if you accidentally hit an animal with your car, you are free to take it home to eat.',
-        true),
+    Question('Chocolate affects a dog\'s heart and nervous system; a few ounces are enough to kill a small dog.', true),
+    Question('In West Virginia, USA, if you accidentally hit an animal with your car, you are free to take it home to eat.', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+    Question('test True', true),
+
+    Question('test False', false),
   ];
 
 //solving issue with not serving error after last question
@@ -39,27 +59,42 @@ class QuizBrain {
     if (_questionNumber < _questionBank.length -
         1) { //simple -1 will not go over number of questions
       _questionNumber++; //increase the number
-      print('q# = $_questionNumber');
+      print('nextQuestion()# = $_questionNumber');
       // print(_questionBank.length);
     }
   }
+  String getQuestionText() {
+//    String getQuestionText(int questionText){ //no need for input
+//    return _questionBank[questionNumber].questionText; //swap for private
+    return _questionBank[_questionNumber].questionText;
+  }
+  bool getCorrectAnswer() {
+    return _questionBank[_questionNumber].questionAnswer;
+  }
 
-  void isFinished(context) {
-    if (_questionNumber < _questionBank.length) {
+  bool isFinished(context) {
+    int x = _questionBank.length;
+    if (_questionNumber >= _questionBank.length - 1) {
 
       print('executing is finished $_questionNumber.');
-      print('q length');
+      print('q length, $_questionBank.length');
       print(_questionBank.length);
 
-    showDialog(
-        context: context,
-        builder: (context) =>
-            AlertDialog(
-              content: Text("hi"),
-            ));
-  }}
+      //Phoenix.rebirth(context);
+      return true;}
+      else {
+        return false;
+    }
+      alertButtons(context, x);
+    // showDialog(
+    //     context: context,
+    //     builder: (context) =>
+    //         AlertDialog(
+    //           content: Text("final score is $score out of $x "),
+    //         ));
+  }
 
-  int finalScore(List<Icon> iconList, String element) {
+  int finalScore(List<Icon> iconList, String correctCount) {
     // print('next print is length of a list');
     // print(list.length);
     if (iconList.isEmpty) {
@@ -68,7 +103,7 @@ class QuizBrain {
     int count = 0;
 
     for (int i = 0; i < iconList.length; i++) {
-      if (iconList[i].semanticLabel == element) {
+      if (iconList[i].semanticLabel == correctCount) {
         count++;
       }
     }
@@ -80,6 +115,58 @@ class QuizBrain {
     // }
     return count;
   }
+
+  // int scoreCount() {
+  //   int score=0;
+  //
+  //   return null;
+  // }
+  void alertButtons(context, int score) {
+    int x = _questionBank.length;
+    // print('alert score: $score');
+    // if (score > 3) {
+    //   showDialog(
+    //       context: context,
+    //       builder: (context) =>
+    //           AlertDialog(
+    //             content: Text("hi"),
+    //           ));
+    // } else {
+    Alert(
+      //if (score <13) {};
+      context: context,
+      type: AlertType.none,
+
+      title: "QUIZZLER",
+      desc: "Quiz finished score $score out of $x",
+      buttons: [
+        DialogButton(
+          onPressed: () {
+            //Navigator.pop(context);
+            Phoenix.rebirth(context);
+            _questionNumber = 0;
+
+          },
+          color: Colors.green,
+          child: const Text(
+            "Start Over",
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+        ),
+        DialogButton(
+          onPressed: () => exit(0), //Navigator.pop(context),
+          color: Colors.red,
+          child: const Text(
+            "Exit app",
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+        ),
+      ],
+    ).show();
+  }
+  // void reset() {
+  //   _questionNumber = 0;
+  // }
 
 //     int countIconOccurrencesUsingLoop(List<Icon> icon_list, String element) {
 //       print(icon_list[0].semanticLabel);
@@ -99,20 +186,12 @@ class QuizBrain {
 //     }
 
   // now we need to delegate task of serving the questions to quiz_brain
-  String getQuestionText() {
-//    String getQuestionText(int questionText){ //no need for input
-//    return _questionBank[questionNumber].questionText; //swap for private
-    return _questionBank[_questionNumber].questionText;
-  }
 
-  bool getCorrectAnswer() {
-    return _questionBank[_questionNumber].questionAnswer;
-  }
 //   void _showDialog() {
 //     Alert(
 //         context: context,
 //         title: "FilledStacks",
-//         desc: "My tutorials show realworld structures.",
+//         desc: "My tutorials show real-world structures.",
 //         closeFunction: () => _dialogService.dialogComplete(),
 //         buttons: [
 //           DialogButton(

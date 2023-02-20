@@ -60,83 +60,96 @@ class _QuizPageState extends State<QuizPage> {
   // );
 
 //  int questionNumber = 0; remove it and put in to brain
+  int scorePoint = 0;
   void checkAnswer(bool userPickedAnswer) {
+
     bool correctAnswer = quizBrain.getCorrectAnswer();
     setState(
       () {
-        if (userPickedAnswer == correctAnswer) {
-          //checking for equality
-          // print('right');
-          scoreKeeper.add(
-            const Icon(
-              Icons.check,
-              color: Colors.green,
-              semanticLabel: 'correct',
-            ),
+        if (quizBrain.isFinished(context) == true) {
+          quizBrain.alertButtons(
+            context, scorePoint
+            //quizBrain.finalScore(scoreKeeper, 'correct'),
           );
         } else {
-          // print('wrong');
-          scoreKeeper.add(
-            const Icon(
-              Icons.close,
-              color: Colors.red,
-              semanticLabel: 'wrong',
-            ),
-          );
+          if (userPickedAnswer == correctAnswer) {
+            scorePoint++;
+            print(scorePoint);
+            //checking for equality
+            // print('right');
+            scoreKeeper.add(
+              const Icon(
+                Icons.check,
+                color: Colors.green,
+                semanticLabel: 'correct',
+              ),
+            );
+
+          } else {
+            // print('wrong');
+            scoreKeeper.add(
+              const Icon(
+                Icons.close,
+                color: Colors.red,
+                semanticLabel: 'wrong',
+              ),
+            );
+          }
+          // setState(
+          //   () {  //cut that out and pate it before icon update
+          quizBrain.nextQuestion();
         }
-        // setState(
-        //   () {  //cut that out and pate it before icon update
-        quizBrain.nextQuestion();
+        ;
       },
     );
-    //quizBrain.isFinished(context);
+    // quizBrain.isFinished(context, quizBrain.finalScore(scoreKeeper, 'correct'));
+
     //quizBrain.finalScore(scoreKeeper, 'correct');
     print(
         "you have ${quizBrain.finalScore(scoreKeeper, 'correct')} correct answers");
     print(
         "you have ${quizBrain.finalScore(scoreKeeper, 'wrong')} wrong answers");
   }
-  void alertButtons(context, int score) {
-    // print('alert score: $score');
-    // if (score > 3) {
-    //   showDialog(
-    //       context: context,
-    //       builder: (context) =>
-    //           AlertDialog(
-    //             content: Text("hi"),
-    //           ));
-    // } else {
-    Alert(
-      //if (score <13) {};
-      context: context,
-      type: AlertType.none,
-      title: "QUIZZLER",
-      desc: "Quiz finished score $score",
-      buttons: [
-        DialogButton(
-          onPressed: () {
-            //Navigator.pop(context);
-            Phoenix.rebirth(context);
-          },
-          color: Colors.green,
-          child: const Text(
-            "Start Over",
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-        ),
-        DialogButton(
-          onPressed: () => exit(0), //Navigator.pop(context),
-          color: Colors.red,
-          child: const Text(
-            "Exit app",
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-        ),
-      ],
-    ).show();
-  }
+  // void alertButtons(context, int score) {
+  //   // print('alert score: $score');
+  //   // if (score > 3) {
+  //   //   showDialog(
+  //   //       context: context,
+  //   //       builder: (context) =>
+  //   //           AlertDialog(
+  //   //             content: Text("hi"),
+  //   //           ));
+  //   // } else {
+  //   Alert(
+  //     //if (score <13) {};
+  //     context: context,
+  //     type: AlertType.none,
+  //     title: "QUIZZLER",
+  //     desc: "Quiz finished score $score",
+  //     buttons: [
+  //       DialogButton(
+  //         onPressed: () {
+  //           //Navigator.pop(context);
+  //           Phoenix.rebirth(context);
+  //         },
+  //         color: Colors.green,
+  //         child: const Text(
+  //           "Start Over",
+  //           style: TextStyle(color: Colors.white, fontSize: 18),
+  //         ),
+  //       ),
+  //       DialogButton(
+  //         onPressed: () => exit(0), //Navigator.pop(context),
+  //         color: Colors.red,
+  //         child: const Text(
+  //           "Exit app",
+  //           style: TextStyle(color: Colors.white, fontSize: 18),
+  //         ),
+  //       ),
+  //     ],
+  //   ).show();
+  // }
   // }}
-
 
 //    quizBrain.nextQuestion(); //wtf is that
   @override
@@ -235,29 +248,31 @@ class _QuizPageState extends State<QuizPage> {
               //},
               ),
         ),
-        Row(
+        // Wrap(
+        //   child:
+        Wrap(   //Use wrap instead of row, if you have more questions they can all fit
           children: scoreKeeper,
         ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.lightBlue,
-              ),
-              child: const Text(
-                'Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
-                ),
-              ),
-              onPressed: () =>
-                  alertButtons(context, quizBrain.finalScore(scoreKeeper, 'correct')), //Phoenix.rebirth(context);}
-            ),
-          ),
-        )
-      ],
+        // Expanded(
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(10.0),
+        //     child: ElevatedButton(
+        //       style: ElevatedButton.styleFrom(
+        //         backgroundColor: Colors.lightBlue,
+        //       ),
+        //       child: const Text(
+        //         'Menu',
+        //         style: TextStyle(
+        //           color: Colors.white,
+        //           fontSize: 20.0,
+        //         ),
+        //       ),
+        //       onPressed: () =>
+        //           alertButtons(context, quizBrain.finalScore(scoreKeeper, 'correct')), //Phoenix.rebirth(context);}
+        //     ),
+        //   ),
+        // )
+        ],
     );
   }
 }
@@ -278,3 +293,5 @@ question3: 'A slug\'s blood is green.', true,
 //TODO: Step 6 - If we've not reached the end, ELSE do the answer checking steps below
 
 //TODO: addition 01 - create total score
+//TODO: addition 02 - new line when icon list become full
+
